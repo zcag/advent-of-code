@@ -1,12 +1,8 @@
-pool = list(map(int, open('input').read().strip().split(',')))
+ls = [0]*9
+for n in open('input').read().split(','): ls[int(n)] += 1
 
+for _ in range(80):
+ ls.append(ls.pop(0))
+ ls[6] += ls[8]
 
-for day in range(80):
-  newborn = 0
-  for i in range(len(pool)):
-    pool[i] -= 1
-    if pool[i] == -1:
-        pool[i] = 6
-        newborn += 1
-  pool += [8]*newborn
-print(len(pool))
+print(sum(ls))
