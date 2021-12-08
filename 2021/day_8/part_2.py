@@ -2,9 +2,9 @@ input = [[[set(sig) for sig in i.strip().split(' ')] for i in l.split('|')] for 
 
 rule = lambda compare, length, rcompare: next(filter(lambda sig:
                                       (length == None or len(sig) == length)
-                                      and (compare == None or d[compare].issubset(sig)
-                                      and (rcompare == None or sig.issubset(d[compare]))
-                                           ), sigs))
+                                      and (compare == None or d[compare].issubset(sig))
+                                      and (rcompare == None or sig.issubset(d[rcompare]))
+                                           , sigs))
 total = 0
 for sigs, outs in input:
   d = dict.fromkeys(range(10))
