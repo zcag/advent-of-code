@@ -2,10 +2,16 @@ nodes = {}
 for l in open('input').read().strip().split('\n'):
   key, val = l.split('-')
   for key, val in [[key, val], [val, key]]:
+    if val == 'start': continue
     if key in nodes: nodes[key].append(val)
     else: nodes[key] = [val]
 
-visitable = lambda n,ls: (n.upper() == n) or n not in ls
+def visitable(n,ls):
+  if n.upper() == n: return True
+  if n not in ls: return True
+  ls = list(filter(lambda x: x.lower() == x, ls))
+  return len(set(ls)) == len(ls)
+
 def find_paths(start='start', end='end', path = [], level = 1):
   path += [start]
   if start == end: return [path[:]]
