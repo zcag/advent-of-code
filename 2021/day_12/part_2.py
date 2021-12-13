@@ -12,14 +12,14 @@ def visitable(n,ls):
   ls = list(filter(lambda x: x.lower() == x, ls))
   return len(set(ls)) == len(ls)
 
-def find_paths(start='start', end='end', path = [], level = 1):
+def find_paths(start='start', end='end', path = []):
   path += [start]
   if start == end: return [path[:]]
   if start not in nodes: return []
   all_paths = []
   for node in nodes[start]:
     if visitable(node, path):
-      for i in find_paths(node, end, path[:], level+1):
+      for i in find_paths(node, end, path[:]):
         all_paths.append(i)
   return all_paths
 
