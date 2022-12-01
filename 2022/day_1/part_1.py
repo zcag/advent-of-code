@@ -1,7 +1,2 @@
-with open('input') as f: foods = f.read().split('\n')[:-1]
-elves = [0]
-for food in foods:
-  if food == '': elves.append(0)
-  else: elves[-1] += int(food)
-print('part 1: ', max(elves))
-print('part 2: ', sum(sorted(elves)[-3:]))
+r = [sum(map(int, elf.split('\n'))) for elf in open('input').read().strip().split('\n\n')]
+print('part 1: ', max(r), '\npart 2: ', sum(sorted(r)[-3:]))
