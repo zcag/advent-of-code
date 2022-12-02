@@ -1,17 +1,15 @@
-games = [game.split() for game in open('input').read().strip().split('\n')]
-rules = {'A': 'CAB', 'B': 'ABC', 'C': 'BCA'}
+games = [game.split() for game in open('input').read().strip().split('\n')] # [[A,Y], [B,X], [C,Z]]
+rules = {'A': 'CAB', 'B': 'ABC', 'C': 'BCA'} # opponent: 'Lose-Draw-Win',  A/B/C: Rock/Paper/Scissors
+score = lambda me, outcome: '.ABC'.index(me) + 'XYZ'.index(outcome)*3 # Rock/Paper/Scissors: 1/2/3 + Win/Draw/Lose: 6/3/0
 
-def score_1(opponent, me):
-  me = chr(ord(me)-23)
-  hand_score = '.ABC'.index(me)
-  outcome_score = rules[opponent].index(me)*3
-  return hand_score + outcome_score
+def part_1(opponent, me):
+  me = chr(ord(me)-23) # XYZ to ABC
+  outcome = 'XYZ'[rules[opponent].index(me)]
+  return score(me, outcome)
 
-def score_2(opponent, outcome):
+def part_2(opponent, outcome):
   me = rules[opponent]['XYZ'.index(outcome)]
-  hand_score = '.ABC'.index(me)
-  outcome_score = 'XYZ'.index(outcome)*3
-  return hand_score + outcome_score
+  return score(me, outcome)
 
-print('Part 1: ', sum(map(lambda args: score_1(*args), games)))
-print('Part 2: ', sum(map(lambda args: score_2(*args), games)))
+print('Part 1: ', sum(map(lambda args: part_1(*args), games)))
+print('Part 2: ', sum(map(lambda args: part_2(*args), games)))
