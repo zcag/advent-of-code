@@ -11,5 +11,5 @@ def part_2(opponent, outcome):
   me = rules[opponent]['XYZ'.index(outcome)]
   return score(me, outcome)
 
-print('Part 1: ', sum(map(lambda args: part_1(*args), games)))
-print('Part 2: ', sum(map(lambda args: part_2(*args), games)))
+print('Part 1:', sum(map(lambda args: part_1(*args), games)))
+print('Part 2:', sum(map(lambda args: part_2(*args), games)))
