@@ -5,26 +5,26 @@ def move_node(dirs, node, rope, visits):
     elif dir == 'U': rope[node][1] += 1
     elif dir == 'D': rope[node][1] -= 1
 
-  if node+1 == len(rope): visits.append([rope[node][0], rope[node][1]])
+  if node+1 == len(rope): visits.add(str(rope[node]))
   else: catch_up(node+1, rope, visits)
 
 def catch_up(node, rope, visits):
-  rel = [rope[node][0] - rope[node - 1][0], rope[node][1] - rope[node - 1][1]]
+  diff = [rope[node][0] - rope[node - 1][0], rope[node][1] - rope[node - 1][1]]
   dirs = []
-  if 2 in (map(abs, rel)):
-    if rel[0] > 0: dirs.append('L')
-    elif rel[0] < 0: dirs.append('R')
-    if rel[1] > 0: dirs.append('D')
-    elif rel[1] < 0: dirs.append('U')
+  if 2 in (map(abs, diff)):
+    if diff[0] > 0: dirs.append('L')
+    elif diff[0] < 0: dirs.append('R')
+    if diff[1] > 0: dirs.append('D')
+    elif diff[1] < 0: dirs.append('U')
 
   move_node(dirs, node, rope, visits)
 
 def solve(size, ops):
-  rope, visits = [[0, 0] for _ in range(size)], []
+  rope, visits = [[0, 0] for _ in range(size)], set()
   for dir, i in ops:
     for _ in range(int(i)): move_node([dir], 0, rope, visits)
-  return len(set(map(str, visits)))
+  return len(visits)
 
 ops = [line.split() for line in open('input').read().splitlines()]
-print('Part 1: ', solve(2, ops))
+print('Part 1:', solve(2, ops))
 print('Part 2:', solve(10, ops))
