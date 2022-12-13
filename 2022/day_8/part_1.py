@@ -1,6 +1,7 @@
 from math import prod
+import sys
 
-grid = open('input').read().splitlines()
+grid = open(sys.argv[1]).read().splitlines()
 trees = []
 for y in range(1, len(grid)-1):
   for x in range(1, len(grid[y])-1):

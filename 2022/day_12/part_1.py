@@ -1,5 +1,5 @@
 from queue import PriorityQueue
-import string
+import string, sys
 
 class Graph:
   def __init__(self, node_count):
@@ -41,7 +41,7 @@ def neighbors(x, y, x_max, y_max):
   for n_x, n_y in [[x+1, y], [x-1, y], [x, y+1], [x, y-1]]:
     if -1 < n_x < x_max and -1 < n_y < y_max: yield [n_x, n_y]
 
-grid = [list(row) for row in open('input').read().strip().splitlines()]
+grid = [list(row) for row in open(sys.argv[1]).read().strip().splitlines()]
 width, height = len(grid[0]), len(grid)
 
 start, goal = find('S', grid)[0], find('E', grid)[0]

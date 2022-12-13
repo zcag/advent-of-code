@@ -1,4 +1,5 @@
-stacks, ops = open('input').read().split('\n\n')
+import sys
+stacks, ops = open(sys.argv[1]).read().split('\n\n')
 stacks = zip(*[row[1::4] for row in stacks.split('\n')[:-1]]) # [(' ', 'N', 'Z'), ('D', 'C', 'M'), (' ', ' ', 'P')]
 stacks_1 = [[el for el in stack if el != ' '] for stack in stacks] # [['N', 'Z'], ['D', 'C', 'M'], ['P']]
 stacks_2 = [[crate for crate in stack] for stack in stacks_1] # copy for part 2

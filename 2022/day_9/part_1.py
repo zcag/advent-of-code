@@ -1,3 +1,5 @@
+import sys
+
 def move_node(dirs, node, rope, visits):
   for dir in dirs:
     if dir == 'R': rope[node][0] += 1
@@ -25,6 +27,6 @@ def solve(size, ops):
     for _ in range(int(i)): move_node([dir], 0, rope, visits)
   return len(visits)
 
-ops = [line.split() for line in open('input').read().splitlines()]
+ops = [line.split() for line in open(sys.argv[1]).read().splitlines()]
 print('Part 1:', solve(2, ops))
 print('Part 2:', solve(10, ops))

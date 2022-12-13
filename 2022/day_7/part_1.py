@@ -1,4 +1,5 @@
 from glom import assign, Path
+import sys
 
 def create_tree(ops):
   tree = { } # { 'a': 1234, 'b': {'c': 234, 'd': {}} }
@@ -19,7 +20,7 @@ def dir_size(root, size_list=[]):
       size_list.append(size)
   return total, size_list
 
-root_size, dirs = dir_size(create_tree(open('input').read().splitlines()))
+root_size, dirs = dir_size(create_tree(open(sys.argv[1]).read().splitlines()))
 
 print('Part 1:', sum(dir for dir in dirs if dir <= 100000))
 print('Part 2:', next((dir for dir in sorted(dirs) if dir >= 30000000 - (70000000 - root_size))))

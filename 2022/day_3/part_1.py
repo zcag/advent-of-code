@@ -1,4 +1,5 @@
-bags = open('input').read().strip().split('\n')
+import sys
+bags = open(sys.argv[1]).read().strip().split('\n')
 
 chars = '.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 common_score = lambda l: chars.index(set.intersection(*map(set, l)).pop())

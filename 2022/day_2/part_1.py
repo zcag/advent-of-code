@@ -1,4 +1,6 @@
-games = [game.split() for game in open('input').read().strip().split('\n')] # [[A,Y], [B,X], [C,Z]]
+import sys
+
+games = [game.split() for game in open(sys.argv[1]).read().strip().split('\n')] # [[A,Y], [B,X], [C,Z]]
 rules = {'A': 'CAB', 'B': 'ABC', 'C': 'BCA'} # opponent: 'Lose-Draw-Win',  A/B/C: Rock/Paper/Scissors
 score = lambda me, outcome: '.ABC'.index(me) + 'XYZ'.index(outcome)*3 # Rock/Paper/Scissors: 1/2/3 + Win/Draw/Lose: 6/3/0
 

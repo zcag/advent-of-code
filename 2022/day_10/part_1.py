@@ -1,4 +1,5 @@
-ops = open('input').read().strip().replace('addx', 'noop\n').splitlines()
+import sys
+ops = open(sys.argv[1]).read().strip().replace('addx', 'noop\n').splitlines()
 
 x, total_strength, crt = 1, 0, ''
 for cycle, op in enumerate(ops):
