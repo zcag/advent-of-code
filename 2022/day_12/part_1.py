@@ -8,14 +8,9 @@ class Graph:
     self.visited = []
 
   def add_edge(self, u, v, weight): self.edges[u][v] = weight
-  def copy(self):
-    new = Graph(self.node_count)
-    new.edges = [x[:] for x in self.edges]
-    return new
 
-  def solve(graph, start_vertex):
-    graph = graph.copy()
-    D = {v:float('inf') for v in range(graph.node_count)}
+  def solve(self, start_vertex):
+    D = {v:float('inf') for v in range(self.node_count)}
     D[start_vertex] = 0
 
     pq = PriorityQueue()
@@ -23,16 +18,16 @@ class Graph:
 
     while not pq.empty():
       (dist, current_vertex) = pq.get()
-      graph.visited.append(current_vertex)
+      self.visited.append(current_vertex)
 
-      for neighbor in range(graph.node_count):
-        if graph.edges[current_vertex][neighbor] == -1 or neighbor in graph.visited: continue
-        old_cost, new_cost = D[neighbor], D[current_vertex] + graph.edges[current_vertex][neighbor]
+      for neighbor in range(self.node_count):
+        if self.edges[current_vertex][neighbor] == -1 or neighbor in self.visited: continue
+
+        old_cost, new_cost = D[neighbor], D[current_vertex] + self.edges[current_vertex][neighbor]
         if new_cost < old_cost:
           pq.put((new_cost, neighbor))
           D[neighbor] = new_cost
     return D
-
 
 find = lambda val, grid: [[row.index(val), y] for y, row in enumerate(grid) if val in row]
 pos = lambda pos, width: (width * pos[1]) + pos[0]
@@ -52,7 +47,8 @@ for y in range(height):
   for x in range(width):
     for target in neighbors(x, y, width, height):
       if ord(grid[target[1]][target[0]]) - ord(grid[y][x]) < 2:
-        graph.add_edge(pos([x, y], width), pos(target, width), 1)
+        graph.add_edge(pos(target, width), pos([x, y], width), 1)
 
-print('Part 1:', graph.solve(pos(start, width))[pos(goal, width)])
-print('Part 2:', min([graph.solve(pos(start, width))[pos(goal, width)] for start in find('a', grid)]))
+costs = graph.solve(pos(goal, width))
+print('Part 1:', costs[pos(start, width)])
+print('Part 2:', min([costs[pos(start, width)] for start in find('a', grid)]))
