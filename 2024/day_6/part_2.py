@@ -11,7 +11,7 @@ def run(x, y, grid):
     visits, dir = set(), 0
     while bounds(x, y, grid) and (x, y, dir) not in visits:
         visits.add((x, y, dir))
-        if get(*walk(x, y, dir), grid) == '#': dir = (dir+1)%4
+        while get(*walk(x, y, dir), grid) == '#': dir = (dir+1)%4
         x, y = walk(x, y, dir)
     return  False if bounds(x, y, grid) else {v[:2] for v in visits}
 
