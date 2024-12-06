@@ -4,19 +4,16 @@ import sys, os, copy
 grid = list(map(list, open(sys.argv[1]).read().strip().split('\n')))
 x0, y0 = [(x,y) for y in range(len(grid)) for x in range(len(grid[0])) if grid[y][x] == '^'][0]
 bounds = lambda x, y, grid: x in range(len(grid[0])) and y in range(len(grid))
+get = lambda x, y, grid: grid[y][x] if bounds(x, y, grid) else '?'
 walk = lambda x, y, dir: (x+[0,1,0,-1][dir], y+[-1,0,1,0][dir])
 
 def run(x, y, grid):
     visits, dir = set(), 0
-    while bounds(x, y, grid):
-        if (x, y, dir) in visits: return False
+    while bounds(x, y, grid) and (x, y, dir) not in visits:
         visits.add((x, y, dir))
-
-        front = walk(x, y, dir)
-        if bounds(*front, grid) and grid[front[1]][front[0]] == '#': dir = (dir+1)%4
+        if get(*walk(x, y, dir), grid) == '#': dir = (dir+1)%4
         x, y = walk(x, y, dir)
-
-    return {v[:2] for v in visits}
+    return  False if bounds(x, y, grid) else {v[:2] for v in visits}
 
 visits, loopstacles = run(x0, y0, grid), 0
 for x, y in visits - {(x0,y0)}:
