@@ -1,66 +1,45 @@
 #!/usr/bin/env python3
 import sys, os, copy
 
-def draw(pos, dir, visits, obstacles, grid, info=""):
+grid = list(map(list, open(sys.argv[1]).read().strip().split('\n')))
+x0, y0 = [(x,y) for y in range(len(grid)) for x in range(len(grid[0])) if grid[y][x] == '^'][0]
+bounds = lambda x, y, grid: x in range(len(grid[0])) and y in range(len(grid))
+walk = lambda x, y, dir: (x+[0,1,0,-1][dir], y+[-1,0,1,0][dir])
+
+def draw(pos, dir, visits, grid, info=""):
     os.system('clear')
-    print(info)
+    print(info, dir)
     print()
     visit_chars = {}
-    for x,y,dir in visits:
-        if (x,y) not in visit_chars: visit_chars[(x,y)] = '|-|-'[dir]
-        elif visit_chars[(x,y)] != '|-|-'[dir]: visit_chars[(x,y)] = '+'
+    for x,y,_dir in visits:
+        if (x,y) not in visit_chars: visit_chars[(x,y)] = '|-|-'[_dir]
+        elif visit_chars[(x,y)] != '|-|-'[_dir]: visit_chars[(x,y)] = '+'
 
     for y in range(len(grid)):
         for x in range(len(grid[0])):
-            if (x,y) in obstacles: print('O', end='')
-            elif (x,y) in visit_chars: print(visit_chars[(x,y)], end='')
+            if (x,y) in visit_chars: print(visit_chars[(x,y)], end='')
             elif (x,y) == pos: print('^>v<'[dir], end='')
             else: print(grid[y][x], end='')
         print()
     input()
 
+def run(x, y, grid):
+    visits, dir = set(), 0
+    while bounds(x, y, grid):
+        # draw((x, y), dir, visits, grid)
+        if (x, y, dir) in visits: return False
+        visits.add((x, y, dir))
 
-grid = list(map(list, open(sys.argv[1]).read().strip().split('\n')))
-initial_pos = [(x,y) for y in range(len(grid)) for x in range(len(grid[0])) if grid[y][x] == '^'][0]
+        front = walk(x, y, dir)
+        if bounds(*front, grid) and grid[front[1]][front[0]] == '#': dir = (dir+1)%4
+        x, y = walk(x, y, dir)
 
-bounds = lambda x,y, grid: 0 <= x < len(grid[0]) and 0 <= y < len(grid)
-get = lambda x,y, grid: grid[y][x] if bounds(x,y, grid) else 'X'
+    return {v[:2] for v in visits}
 
-walk = lambda x,y,dir: (x+[0,1,0,-1][dir],y+[-1,0,1,0][dir])
-turn = lambda dir: (dir+1)%4
+visits, loopstacles = run(x0, y0, grid), 0
+for x, y in visits - {(x0,y0)}:
+    grid[y][x] = '#'
+    if not run(x0, y0, grid): loopstacles += 1
+    grid[y][x] = '.'
 
-def with_obstacle(obstacle):
-    out = copy.deepcopy(grid)
-    if obstacle is not None and bounds(*obstacle, out):
-        out[obstacle[1]][obstacle[0]] = '#'
-    return out
-
-runs = 0
-
-def run(start_pos, start_dir, obstacle=None):
-    global runs
-    runs += 1
-
-    visits, loobstacles, pos, dir, grid = set(), set(), start_pos[::], start_dir, with_obstacle(obstacle)
-
-    while(bounds(*pos, grid)):
-        if (*pos, dir) in visits: return loobstacles, 'loops'
-        visits.add((*pos, dir))
-
-        # if not add_obstacles: draw(pos, dir, visits, loobstacles, grid)
-        # draw(pos, dir, visits, loobstacles, grid, add_obstacles)
-
-        if get(*walk(*pos, dir), grid) == '#': dir = turn(dir)
-
-        front = walk(*pos, dir)
-        if obstacle is None and front != initial_pos and run(start_pos, start_dir, front)[-1] == 'loops':
-            loobstacles.add(front)
-
-
-        pos = walk(*pos, dir)
-    return loobstacles, 'ends'
-
-
-# print('Part 1:', len(run(start_pos, 0, True)[0]))
-print('Part 2:', len(run(initial_pos, 0)[0]))
-print("runs: ", runs)
+print('Part 1:', len(visits), '\nPart 2:', loopstacles)
